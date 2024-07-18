@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+		<title>Print Example</title>
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+	</head>
+	<body>
+		<div class="container">
+			<div id="printable">
+				<div class="row justify-content-md-center">
+					<div class="col col-lg-8">
+						<div class="col"><label>Monto hora $ </label></div>
+						<div class="col"><input type="number" id="montoHora" value="80" /></div>
+					</div>
+					<div>
+						<img src="./assets/logo.jpg" alt="no img" />
+						<div class="text">Text inside div with class text</div>
+						<span id="timeSpan">empty</span>
+					</div>
+				</div>
+			</div>
+			<button class="btn-success btn" id="print-button">Print</button>
+		</div>
+
+		<script>
+			document.getElementById("print-button").addEventListener("click", () => {
+				const printableContent = document.getElementById("printable").outerHTML;
+				window.electron.print(printableContent);
+			});
+		</script>
+		<script src="./jquery/view.js"></script>
+	</body>
+</html>
+<!-- <h1>Printable title</h1>
+    <p>This content will be printed when the button is clicked. Doubled: This content will be printed when the button is clicked.</p> -->
