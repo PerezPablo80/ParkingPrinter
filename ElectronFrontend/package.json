@@ -19,6 +19,7 @@
 	},
 	"dependencies": {
 		"bootstrap": "^5.3.3",
+		"exceljs": "^4.4.0",
 		"jquery": "^3.7.1"
 	}
 }

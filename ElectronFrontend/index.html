@@ -10,27 +10,52 @@
 		<div class="container">
 			<div id="printable">
 				<div class="row justify-content-md-center">
-					<div class="col col-lg-8">
-						<div class="col"><label>Monto hora $ </label></div>
-						<div class="col"><input type="number" id="montoHora" value="80" /></div>
-					</div>
-					<div>
-						<img src="./assets/logo.jpg" alt="no img" />
-						<div class="text">Text inside div with class text</div>
-						<span id="timeSpan">empty</span>
+					<div class="col"><img src="./assets/logo.jpg" alt="no img" /></div>
+					<div class="col col-lg-4">
+						<h5><label>Monto hora $ </label></h5>
+						&nbsp;&nbsp;&nbsp;
+						<div class="form-group">
+							<input class="form-control" type="number" id="montoHora" value="80" />
+						</div>
 					</div>
 				</div>
+				<div class="row justify-content-md-center">
+					<!-- <div class="text">Text inside div with class text</div> -->
+					<div class="col col-lg-4"><h4 id="timeSpan">Hora indefinida</h4></div>
+				</div>
 			</div>
-			<button class="btn-success btn" id="print-button">Print</button>
 		</div>
+		<!-- Aqui pongo el alta de vehículo -->
+		<div>
+			<div class="form-group">
+				<label for="vehiclePlate">Patente</label>
+				<input type="vehiculo" class="form-control" id="vehiclePlate" placeholder="Ingrese chapa" />
+			</div>
 
+			<button type="button" id="addVehicle" class="btn btn-primary">Agregar</button>
+		</div>
+		<table id="data-table" class="table">
+			<thead class="thead-dark">
+				<tr>
+					<th>Acción</th>
+					<th>Vehículo</th>
+					<th>Hora Inicio</th>
+					<th>Finalizado</th>
+				</tr>
+			</thead>
+			<tbody></tbody>
+		</table>
+		<button id="save">Save Data to Excel</button>
+		<!-- <button id="load">Load Data from Excel</button> -->
+		<!-- <button class="btn-success btn" id="print-button">Print</button> -->
 		<script>
-			document.getElementById("print-button").addEventListener("click", () => {
+			/* document.getElementById("print-button").addEventListener("click", () => {
 				const printableContent = document.getElementById("printable").outerHTML;
 				window.electron.print(printableContent);
-			});
+			}); */
 		</script>
-		<script src="./jquery/view.js"></script>
+		<script src="./frontSrc/view.js"></script>
+		<script src="./frontSrc/excelSolicitor.js"></script>
 	</body>
 </html>
 <!-- <h1>Printable title</h1>

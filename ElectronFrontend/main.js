@@ -1,6 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require("electron");
 const path = require("path");
 const fs = require("fs");
+const ExcelJS = require("exceljs");
 
 let mainWindow;
 
@@ -74,4 +75,47 @@ ipcMain.on("print", (event, content) => {
 		printWindow.close();
 		fs.unlinkSync(tempFilePath); // Delete the temporary file in case of failure
 	});
+});
+
+ipcMain.handle("save-excel", async (event, data) => {
+	const { filePath } = await dialog.showSaveDialog({
+		title: "Save Excel File",
+		defaultPath: "data.xlsx",
+		filters: [{ name: "Excel Files", extensions: ["xlsx"] }],
+	});
+
+	if (filePath) {
+		const workbook = new ExcelJS.Workbook();
+		const worksheet = workbook.addWorksheet("Hoja 1");
+
+		worksheet.columns = Object.keys(data[0]).map((key) => ({ header: key, key }));
+
+		data.forEach((row) => {
+			worksheet.addRow(row);
+		});
+
+		await workbook.xlsx.writeFile(filePath);
+		return filePath;
+	}
+});
+
+ipcMain.handle("load-excel", async (event, filePath) => {
+	if (!filePath) filePath = "./assets/archivo.xlsx";
+	console.log("filePath:", filePath);
+	const workbook = new ExcelJS.Workbook();
+	await workbook.xlsx.readFile(filePath);
+	const worksheet = workbook.getWorksheet(1); //Hoja1
+	const data = [];
+	worksheet.eachRow((row, rowNumber) => {
+		if (rowNumber > 1) {
+			const rowData = {};
+			row.eachCell((cell, colNumber) => {
+				rowData[worksheet.getRow(1).getCell(colNumber).value] = cell.value;
+			});
+			data.push(rowData);
+			// console.log("RowData:", rowData);
+		}
+	});
+	// console.log("data on main:", data);
+	return data;
 });
