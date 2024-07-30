@@ -139,10 +139,13 @@ ipcMain.handle("save-excel", async (event, data) => {
 	}
 	return filePath;
 });
-
+ipcMain.handle("finalize-vehicle", async (event, data) => {
+	console.log("DATA:", data);
+	return { result: "ok" };
+});
 ipcMain.handle("load-excel", async (event, filePath) => {
 	if (!filePath) filePath = "./assets/archivo.xlsx";
-	console.log("filePath:", filePath);
+	// console.log("filePath:", filePath);
 	const workbook = new ExcelJS.Workbook();
 	await workbook.xlsx.readFile(filePath);
 	const worksheet = workbook.getWorksheet(1); //Hoja1

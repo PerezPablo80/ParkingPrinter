@@ -30,7 +30,7 @@
 						</div>
 						<div class="row">
 							<div class="input-group mb-3">
-								<label for="vehiclePlate">Patente</label>
+								<label class="form-control" for="vehiclePlate">Patente&nbsp;&nbsp;&nbsp;</label>
 								<input
 									type="vehiculo"
 									class="form-control"
@@ -43,7 +43,37 @@
 					</div>
 				</div>
 			</div>
-
+			<div class="row">
+				<div class="col-md-8">
+					<div class="input-group mb-3">
+						<label class="form-control" for="vehiclePlate">Patente&nbsp;&nbsp;&nbsp;</label>
+						<input
+							type="vehiculo"
+							class="form-control"
+							id="finalizeVehiclePlate"
+							placeholder="Ingrese chapa"
+						/>
+						<button type="button" id="finalizeVehicle" class="btn btn-danger">Verificar</button>
+					</div>
+				</div>
+				<div class="row d-none" id="hiddenFinalizationData">
+					<div class="col-md-8">
+						<div class="input-group mb-2">
+							<label class="form-control" for="timeSpent">Tiempo&nbsp;&nbsp;&nbsp;</label>
+							<input type="input" disabled class="form-control" id="timeSpent" />
+						</div>
+						<div class="input-group mb-2">
+							<label class="form-control" for="vehiclePlate">Importe a abonar&nbsp;&nbsp;&nbsp;</label>
+							<input type="number" disabled class="form-control" id="moneyToPay" />
+						</div>
+						<div class="input-group mb-3">
+							<label class="form-control" for="moneyPaid">Importe que paga&nbsp;&nbsp;&nbsp;</label>
+							<input type="number" class="form-control" id="moneyPaid" />
+							<button type="button" id="payFinalize" class="btn btn-danger">Pagar</button>
+						</div>
+					</div>
+				</div>
+			</div>
 			<!-- Search input for table -->
 			<div class="mb-3">
 				<input type="text" class="form-control" id="tableSearch" placeholder="Search table..." />
@@ -56,8 +86,8 @@
 						<tr>
 							<th>Acción</th>
 							<th>Vehículo</th>
-							<th>Hora Inicio</th>
-							<th>Finalizado</th>
+							<th>Hora inicio</th>
+							<th>Hora fin</th>
 						</tr>
 					</thead>
 					<tbody></tbody>
@@ -80,10 +110,34 @@
 				</div>
 			</div>
 			<button id="save-data">Save Data to Excel</button>
-			<!-- <button id="load">Load Data from Excel</button> -->
 			<button class="btn-success btn" id="print-button">Print</button>
+			<!-- <button id="load">Load Data from Excel</button> -->
 		</div>
-		<!-- Esto es el viejo
+
+		<script>
+			/**/ document.getElementById("print-button").addEventListener("click", () => {
+				/*const printableContent = document.getElementById("printable").outerHTML;*/
+				const patente = document.getElementById("vehiclePlate").value;
+				let hora = document.getElementById("timeSpan").innerHTML;
+				let dia = document.getElementById("dateSpan").innerHTML;
+				document.getElementById("patente").innerText = patente;
+				document.getElementById("hora").innerText = hora;
+				document.getElementById("dia").innerText = dia;
+				JsBarcode("#barcode", patente, {
+					format: "CODE128",
+					lineColor: "#676a6c",
+					displayValue: true,
+				});
+				/* document.getElementById("barcode").src = "https://barcodeapi.org/api/128/" + patente; */
+				const printableContent = document.getElementById("hiddenPrintable").innerHTML;
+				window.electron.print(printableContent);
+			}); /**/
+		</script>
+		<script src="./frontSrc/view.js"></script>
+		<script src="./frontSrc/excelSolicitor.js"></script>
+	</body>
+</html>
+<!-- Esto es el viejo
 		<div class="container">
 			<div id="printable">
 				<div class="justify-content-md-center">
@@ -148,28 +202,3 @@
 		<button id="save-data">Save Data to Excel</button>
 		<button class="btn-success btn" id="print-button">Print</button>
 	-->
-		<script>
-			/**/ document.getElementById("print-button").addEventListener("click", () => {
-				/*const printableContent = document.getElementById("printable").outerHTML;*/
-				const patente = document.getElementById("vehiclePlate").value;
-				let hora = document.getElementById("timeSpan").innerHTML;
-				let dia = document.getElementById("dateSpan").innerHTML;
-				document.getElementById("patente").innerText = patente;
-				document.getElementById("hora").innerText = hora;
-				document.getElementById("dia").innerText = dia;
-				JsBarcode("#barcode", patente, {
-					format: "CODE128",
-					lineColor: "#676a6c",
-					displayValue: true,
-				});
-				/* document.getElementById("barcode").src = "https://barcodeapi.org/api/128/" + patente; */
-				const printableContent = document.getElementById("hiddenPrintable").innerHTML;
-				window.electron.print(printableContent);
-			}); /**/
-		</script>
-		<script src="./frontSrc/view.js"></script>
-		<script src="./frontSrc/excelSolicitor.js"></script>
-	</body>
-</html>
-<!-- <h1>Printable title</h1>
-    <p>This content will be printed when the button is clicked. Doubled: This content will be printed when the button is clicked.</p> -->
