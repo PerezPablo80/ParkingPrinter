@@ -34,11 +34,6 @@ app.on("activate", () => {
 });
 
 ipcMain.on("print", (event, content) => {
-	// Read the CSS styles
-	// const styles = fs.readFileSync(path.join(__dirname, "printableStyles.css"), "utf-8");
-
-	// Sanitize the styles to ensure they don't contain any characters that might break the HTML structure
-	// const sanitizedStyles = styles.replace(/<\/style>/g, "<\\/style>").replace(/<!--/g, "<\\!--");
 	const sanitizedContent = content.replace(/<\/style>/g, "<\\/style>").replace(/<!--/g, "<\\!--");
 	const printCSS = `
     <style>
@@ -61,13 +56,8 @@ ipcMain.on("print", (event, content) => {
       /* Add more specific styles here */
     </style>
   `;
-
-	// Save the HTML content to a temporary file
-	// const tempFilePath = path.join(__dirname, "temp_print.html");
-	// fs.writeFileSync(tempFilePath, htmlContent);
-
+	console.log(" CONTENT", content);
 	const printWindow = new BrowserWindow({ show: false });
-	// printWindow.loadFile(tempFilePath);
 	printWindow.webContents.loadURL(
 		`data:text/html,${encodeURIComponent(`
 	<!DOCTYPE html>
@@ -89,13 +79,11 @@ ipcMain.on("print", (event, content) => {
 				console.log("Print success");
 			}
 			printWindow.close();
-			// fs.unlinkSync(tempFilePath); // Delete the temporary file after printing
 		});
 	});
 	printWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
 		console.log("Failed to load content: ", errorDescription);
 		printWindow.close();
-		fs.unlinkSync(tempFilePath); // Delete the temporary file in case of failure
 	});
 });
 
@@ -109,14 +97,11 @@ ipcMain.handle("save-excel", async (event, data) => {
 		} else {
 			workbook.addWorksheet("Hoja 1");
 		}
-
 		const worksheet = workbook.getWorksheet("Hoja 1");
-
 		// Define columns if they are not already defined
 		if (!worksheet.columns.length) {
 			worksheet.columns = Object.keys(data[0]).map((key) => ({ header: key, key }));
 		}
-
 		// Update rows based on IDs
 		data.forEach((newRow) => {
 			const row = worksheet.getRow(newRow.Id + 1); // Assuming Id is 1-based and matches the row number
@@ -139,16 +124,12 @@ ipcMain.handle("save-excel", async (event, data) => {
 	}
 	return filePath;
 });
-ipcMain.handle("finalize-vehicle", async (event, data) => {
-	console.log("DATA:", data);
-	return { result: "ok" };
-});
+
 ipcMain.handle("load-excel", async (event, filePath) => {
 	if (!filePath) filePath = "./assets/archivo.xlsx";
-	// console.log("filePath:", filePath);
 	const workbook = new ExcelJS.Workbook();
 	await workbook.xlsx.readFile(filePath);
-	const worksheet = workbook.getWorksheet(1); //Hoja1
+	const worksheet = workbook.getWorksheet(1); //Hoja 1
 	const data = [];
 	worksheet.eachRow((row, rowNumber) => {
 		if (rowNumber > 1) {
@@ -159,58 +140,5 @@ ipcMain.handle("load-excel", async (event, filePath) => {
 			data.push(rowData);
 		}
 	});
-
 	return data;
 });
-
-/*
-ipcMain.on("print", (event, content) => {
-	// Read the CSS styles
-	const styles = fs.readFileSync(path.join(__dirname, "printableStyles.css"), "utf-8");
-
-	// Sanitize the styles to ensure they don't contain any characters that might break the HTML structure
-	const sanitizedStyles = styles.replace(/<\/style>/g, "<\\/style>").replace(/<!--/g, "<\\!--");
-	const sanitizedContent = content.replace(/<\/style>/g, "<\\/style>").replace(/<!--/g, "<\\!--");
-
-	// Create the HTML content with the sanitized styles
-	const htmlContent = `
-        <html>
-        	<head>
-        	    <style>${sanitizedStyles}</style>
-        	</head>
-        	<body style="width: 80mm; margin: 0; padding: 5%;">
-				${sanitizedContent}
-			</body>
-        </html>
-    `;
-
-	// Save the HTML content to a temporary file
-	const tempFilePath = path.join(__dirname, "temp_print.html");
-	fs.writeFileSync(tempFilePath, htmlContent);
-
-	const printWindow = new BrowserWindow({ show: false });
-	printWindow.loadFile(tempFilePath);
-	printWindow.webContents.on("did-finish-load", () => {
-		printWindow.webContents.print({ silent: true, printBackground: true }, (success, errorType) => {
-			if (!success) {
-				console.log("Print failed: ", errorType);
-			} else {
-				console.log("Print success");
-			}
-			printWindow.close();
-			fs.unlinkSync(tempFilePath); // Delete the temporary file after printing
-		});
-	});
-	printWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription) => {
-		console.log("Failed to load content: ", errorDescription);
-		printWindow.close();
-		fs.unlinkSync(tempFilePath); // Delete the temporary file in case of failure
-	});
-});
-
-*/
-/*// const { filePath } = await dialog.showSaveDialog({
-	// 	title: "Save Excel File",
-	// 	defaultPath: "data.xlsx",
-	// 	filters: [{ name: "Excel Files", extensions: ["xlsx"] }],
-	// }); */

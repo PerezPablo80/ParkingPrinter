@@ -14,7 +14,6 @@ document.getElementById("payFinalize").addEventListener("click", async (event) =
 	let dateEnd = document.getElementById("dateSpan").textContent;
 	let diff = Math.abs(timeInMils - vehiculo["Inicio milisegundos"]) / 36e5;
 	let t = getHoraMinutos(diff);
-	console.log("T::", t);
 	vehiculo["Dia fin"] = dateEnd;
 	vehiculo["Hora fin"] = timeEnd;
 	vehiculo["Fin milisegundos"] = timeInMils;
@@ -40,16 +39,15 @@ document.getElementById("finalizeVehicle").addEventListener("click", (event) => 
 	let input = document.getElementById("finalizeVehiclePlate").value;
 	let timeInMils = new Date().getTime();
 	let vehiculo = helperData.find((e) => e.Vehiculo === input);
-	console.log("vehiulo:", vehiculo);
+	// console.log("vehiulo:", vehiculo);
 	if (vehiculo) {
 		let diff = Math.abs(timeInMils - vehiculo["Inicio milisegundos"]) / 36e5;
 		let monto = document.getElementById("montoHora").innerText;
 		monto = Number(monto);
-		console.log(`Monto: $ ${monto}`);
 		let d = diff.toString().split(".");
 		let minutos = Math.abs(Math.round((diff * 36e5) / 60 / 1000)) % 60; //no pueden haber mas de 60 minutos.
 		let horas = Number(d[0]);
-		console.log(`Horas: ${horas} and Minutos: ${minutos}`);
+		// console.log(`Horas: ${horas} and Minutos: ${minutos}`);
 		let costo = 0;
 		if (minutos > 25 && minutos < 50) {
 			costo = monto * horas + monto / 2;
@@ -81,12 +79,9 @@ function getHoraMinutos(diff) {
 	}
 }
 document.getElementById("addVehicle").addEventListener("click", async (datos) => {
-	// console.log('DAtos:',datos);
 	let input = document.getElementById("vehiclePlate").value;
 	let time = document.getElementById("timeSpan").textContent;
 	let date = document.getElementById("dateSpan").textContent;
-	console.log("Input:", input);
-	console.log("time:", time);
 	document.getElementById("vehiclePlate").value = "";
 	let mil = new Date().getTime();
 
@@ -106,7 +101,7 @@ function maxId() {
 	helperData.forEach((h) => {
 		if (h["Id"] > max) max = h["Id"];
 	});
-	console.log("MAX+1:", max + 1);
+	// console.log("MAX+1:", max + 1);
 	return max + 1;
 }
 async function loadFile() {
@@ -131,7 +126,7 @@ async function loadFile() {
 				button.className = "btn btn-success";
 				button.onclick = async () => {
 					// Define the action based on row ID
-					console.log(`Button clicked for row with ID: ${row.Id}`);
+					// console.log(`Button clicked for row with ID: ${row.Id}`);
 					let pat = row.Vehiculo;
 					document.getElementById("finalizeVehiclePlate").value = pat;
 					document.getElementById("finalizeVehicle").click();
@@ -158,62 +153,60 @@ async function loadFile() {
 			}
 			helperData.push(row);
 		});
-		// helperData.push({maxId:maxId});
-		console.log("HelperData:", helperData);
+		// console.log("HelperData:", helperData);
 	} catch (e) {
 		console.log("Exception loading file::", e);
 	}
 }
 function addVehicle(data) {
-	console.log("HELPER pre:", helperData);
 	helperData.push(data);
-	print({ status: "Alta" });
+	print({ status: "Alta", vehicle: data });
 }
-document.getElementById("finalize-vehicle");
 
 //imprime cuando se da de alta un auto y luego cuando se paga, status=Inicio//Fin
 //se cargan los valores e imprime tomando datos de index.html
-function print({ status = false }) {
+function print({ status = false, vehicle = false }) {
 	const hora = document.getElementById("timeSpan").innerHTML;
 	const dia = document.getElementById("dateSpan").innerHTML;
-	console.log("Status:", status);
 	if (status === "Alta") {
-		const patente = document.getElementById("vehiclePlate").value;
+		let patente = vehicle.Vehiculo;
 		document.getElementById("patente").innerText = patente;
 		document.getElementById("hora").innerText = hora;
 		document.getElementById("dia").innerText = dia;
-		JsBarcode("#barcode", patente, {
-			format: "CODE128",
-			lineColor: "#676a6c",
-			displayValue: true,
-		});
-		/* Other way (otra forma): document.getElementById("barcode").src = "https://barcodeapi.org/api/128/" + patente; */
-		const printableContent = document.getElementById("hiddenPrintable").innerHTML;
-		window.electron.print(printableContent);
+		if (patente.length > 0) {
+			JsBarcode("#barcode", patente, {
+				format: "CODE128",
+				lineColor: "#676a6c",
+				displayValue: true,
+			});
+			/* Other way (otra forma): document.getElementById("barcode").src = "https://barcodeapi.org/api/128/" + patente; */
+			let printableContent = document.getElementById("hiddenPrintable").innerHTML;
+			window.electron.print(printableContent);
+		}
 	} else {
 		if (status === "Entrega") {
-			const patente = document.getElementById("finalizeVehiclePlate").value;
+			let patente = document.getElementById("finalizeVehiclePlate").value;
 			document.getElementById("patente").innerText = patente;
 			document.getElementById("hora").innerText = hora;
 			document.getElementById("dia").innerText = dia;
 			const moneyToPay = document.getElementById("moneyToPay").value;
 			const timeSpent = document.getElementById("timeSpent").value;
 			const moneyPaid = document.getElementById("moneyPaid").value;
-			document.getElementById("divLogo").style.display = "none";
+			document.getElementById("divLogo").style.display = "block";
 			document.getElementById("barcode").style.display = "none";
 			document.getElementById(
 				"dia"
 			).innerText = `Tiempo en Parking:\n${timeSpent}\nA pagar:\n$ ${moneyToPay}\nImporte abonado:\n$ ${moneyPaid}`;
-			const printableContent = document.getElementById("hiddenPrintable").innerHTML;
+			let printableContent = document.getElementById("hiddenPrintable").innerHTML;
 			window.electron.print(printableContent);
-			document.getElementById("divLogo").style.display = "block";
+			document.getElementById("divLogo").style.display = "none";
 			document.getElementById("barcode").style.display = "block";
 		}
 	}
 	clearHidden();
 }
 function clearHidden() {
-	document.getElementById("patente").innerText = "";
+	document.getElementById("patente").value = "";
 	document.getElementById("hora").innerText = "";
 	document.getElementById("dia").innerText = "";
 	document.getElementById("extraInfo").innerText = "";
