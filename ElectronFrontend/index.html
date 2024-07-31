@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+		<!-- (otra forma/other way) <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 		<script src="./assets/jquery-3.6.0.min.js"></script>
 		<script src="./assets/JsBarcode.all.min.js"></script>
 		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
@@ -95,110 +95,28 @@
 			</div>
 			<div id="hiddenPrintable" class="d-none">
 				<div class="someClass">
-					<!-- <img id="barcode" /> -->
+					<div id="divLogo" class="d-none"><img id="logo" alt="no logo" /></div>
 					<svg id="barcode"></svg>
 					<hr />
 					<span class="spanclass"
-						><h4>
+						><h3>
 							Patente:
-							<div id="patente">Patente</div>
-						</h4>
+							<span id="patente">Patente</span>
+						</h3>
 					</span>
-
 					<span class="spanclass"><h3 id="dia">Fecha</h3></span>
 					<span class="spanclass"><h3 id="hora">Hora indefinida</h3></span>
+					<p id="extraInfo"></p>
 				</div>
 			</div>
-			<button id="save-data">Save Data to Excel</button>
-			<button class="btn-success btn" id="print-button">Print</button>
-			<!-- <button id="load">Load Data from Excel</button> -->
+			<div class="d-none">
+				<button id="save-data">Save Data to Excel</button>
+				<button class="btn-success btn" id="print-button">Print</button>
+			</div>
 		</div>
 
-		<script>
-			/**/ document.getElementById("print-button").addEventListener("click", () => {
-				/*const printableContent = document.getElementById("printable").outerHTML;*/
-				const patente = document.getElementById("vehiclePlate").value;
-				let hora = document.getElementById("timeSpan").innerHTML;
-				let dia = document.getElementById("dateSpan").innerHTML;
-				document.getElementById("patente").innerText = patente;
-				document.getElementById("hora").innerText = hora;
-				document.getElementById("dia").innerText = dia;
-				JsBarcode("#barcode", patente, {
-					format: "CODE128",
-					lineColor: "#676a6c",
-					displayValue: true,
-				});
-				/* document.getElementById("barcode").src = "https://barcodeapi.org/api/128/" + patente; */
-				const printableContent = document.getElementById("hiddenPrintable").innerHTML;
-				window.electron.print(printableContent);
-			}); /**/
-		</script>
+		<script></script>
 		<script src="./frontSrc/view.js"></script>
 		<script src="./frontSrc/excelSolicitor.js"></script>
 	</body>
 </html>
-<!-- Esto es el viejo
-		<div class="container">
-			<div id="printable">
-				<div class="justify-content-md-center">
-					<div class="col"><img style="max-height: 100px" src="./assets/logo.jpg" alt="no img" /></div>
-					<div class="col">
-						<div class="col col-lg-4">
-							<div class="form-inline">
-								<h5></h5>
-								<label>Monto hora $ <span id="montoHora">80</span></label>
-								&nbsp;&nbsp;&nbsp;
-								<div class="form-group">
-									<input class="form-control" type="number" id="montoHora" value="80" />
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-				<div class="row justify-content-md-center"></div>
-				<div class="row justify-content-md-center">
-					<div class="col col-lg-4">
-						<h4>Hora <span id="timeSpan"></span></h4>
-					</div>
-					<div class="col col-lg-4 d-none"><h6 id="dateSpan">Fecha</h6></div>
-				</div>
-			</div>
-		</div>
-		 Aqui pongo el alta de vehículo 
-		<div>
-			<div class="form-group">
-				<label for="vehiclePlate">Patente</label>
-				<input type="vehiculo" class="form-control" id="vehiclePlate" placeholder="Ingrese chapa" />
-			</div>
-
-			<button type="button" id="addVehicle" class="btn btn-primary">Agregar</button>
-		</div>
-		<table id="data-table" class="table">
-			<thead class="thead-dark">
-				<tr>
-					<th>Acción</th>
-					<th>Vehículo</th>
-					<th>Hora Inicio</th>
-					<th>Finalizado</th>
-				</tr>
-			</thead>
-			<tbody></tbody>
-		</table>
-		<div id="hiddenPrintable" class="d-none">
-			<div class="someClass">
-				<svg id="barcode"></svg>
-				<hr />
-				<span class="spanclass"
-					><h4>
-						Patente:
-						<div id="patente">Patente</div>
-					</h4>
-				</span>
-
-				<span class="spanclass"><h3 id="dia">Fecha</h3></span>
-				<span class="spanclass"><h3 id="hora">Hora indefinida</h3></span>
-			</div>
-		</div>
-		<button id="save-data">Save Data to Excel</button>
-		<button class="btn-success btn" id="print-button">Print</button>
-	-->
