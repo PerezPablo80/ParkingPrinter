@@ -1,0 +1,26 @@
+{
+	"name": "electronfrontend",
+	"version": "1.0.0",
+	"description": "Parking printing idea used with Electron to simplify the printing process using windows printer app",
+	"main": "main.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"Print",
+		"parking",
+		"electron",
+		"passthrough"
+	],
+	"author": "Pablo Perez <perez.pablo@gmail.com>",
+	"license": "MIT",
+	"devDependencies": {
+		"electron": "^31.2.0"
+	},
+	"dependencies": {
+		"bootstrap": "^5.3.3",
+		"exceljs": "^4.4.0",
+		"jquery": "^3.7.1",
+		"jsbarcode": "^3.11.6"
+	}
+}

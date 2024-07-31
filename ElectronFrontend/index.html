@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<!-- (otra forma/other way) <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+		<script src="./assets/jquery-3.6.0.min.js"></script>
+		<script src="./assets/JsBarcode.all.min.js"></script>
+		<link rel="stylesheet" href="node_modules/bootstrap/dist/css/bootstrap.min.css" />
+		<title>Print Example</title>
+		<link rel="stylesheet" type="text/css" href="styles.css" />
+	</head>
+	<body>
+		<div class="container mt-4">
+			<!-- Row with two columns -->
+			<div class="row mb-4">
+				<!-- Left column with image -->
+				<div class="col-md-6">
+					<img style="max-height: 100px" src="./assets/logo.jpg" alt="no img" class="img-fluid" />
+				</div>
+				<!-- Right column with date, time, input, and button -->
+				<div class="col-md-6">
+					<div class="d-flex flex-column h-100 justify-content-center">
+						<div class="row">
+							<div class="mb-3">
+								<h4>Hora <span id="timeSpan"></span></h4>
+							</div>
+							<div class="col col-lg-4 d-none"><h6 id="dateSpan">Fecha</h6></div>
+							<p>
+								<label>Monto hora $ <span id="montoHora">80</span></label>
+							</p>
+						</div>
+						<div class="row">
+							<div class="input-group mb-3">
+								<label class="form-control" for="vehiclePlate">Patente&nbsp;&nbsp;&nbsp;</label>
+								<input type="text" class="form-control" id="vehiclePlate" placeholder="Ingrese chapa" />
+								<button type="button" id="addVehicle" class="btn btn-primary">Agregar</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-8">
+					<div class="input-group mb-3">
+						<label class="form-control" for="finalizeVehiclePlate">Patente&nbsp;&nbsp;&nbsp;</label>
+						<input type="text" class="form-control" id="finalizeVehiclePlate" placeholder="Ingrese chapa" />
+						<button type="button" id="finalizeVehicle" class="btn btn-danger">Verificar</button>
+					</div>
+				</div>
+				<div class="row d-none" id="hiddenFinalizationData">
+					<div class="col-md-8">
+						<div class="input-group mb-2">
+							<label class="form-control" for="timeSpent">Tiempo&nbsp;&nbsp;&nbsp;</label>
+							<input type="input" disabled class="form-control" id="timeSpent" />
+						</div>
+						<div class="input-group mb-2">
+							<label class="form-control" for="moneyToPay">Importe a abonar&nbsp;&nbsp;&nbsp;</label>
+							<input type="number" disabled class="form-control" id="moneyToPay" />
+						</div>
+						<div class="input-group mb-3">
+							<label class="form-control" for="moneyPaid">Importe que paga&nbsp;&nbsp;&nbsp;</label>
+							<input type="number" class="form-control" id="moneyPaid" />
+							<button type="button" id="payFinalize" class="btn btn-danger">Pagar</button>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!-- Search input for table -->
+			<div class="mb-3">
+				<input type="text" class="form-control" id="tableSearch" placeholder="Search table..." />
+			</div>
+
+			<!-- Table -->
+			<div class="table-responsive">
+				<table id="data-table" class="table table-striped table-hover">
+					<thead class="thead-dark">
+						<tr>
+							<th>Acción</th>
+							<th>Vehículo</th>
+							<th>Hora inicio</th>
+							<th>Hora fin</th>
+						</tr>
+					</thead>
+					<tbody></tbody>
+				</table>
+			</div>
+			<div id="hiddenPrintable" class="d-none">
+				<div class="someClass">
+					<div id="divLogo">
+						<img style="max-width: 75mm" id="logo" src="./assets//logo.jpg" alt="no logo" />
+					</div>
+					<svg id="barcode"></svg>
+					<hr />
+					<span class="spanclass"
+						><h3>
+							Patente:
+							<span id="patente">Patente</span>
+						</h3>
+					</span>
+					<span class="spanclass"><h3 id="dia">Fecha</h3></span>
+					<span class="spanclass"><h3 id="hora">Hora indefinida</h3></span>
+					<p id="extraInfo"></p>
+				</div>
+			</div>
+			<div class="d-none">
+				<button id="save-data">Save Data to Excel</button>
+				<button class="btn-success btn" id="print-button">Print</button>
+			</div>
+		</div>
+
+		<script></script>
+		<script src="./frontSrc/view.js"></script>
+		<script src="./frontSrc/excelSolicitor.js"></script>
+	</body>
+</html>
